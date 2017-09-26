@@ -21,7 +21,6 @@
     failovermethod: priority
     enabled: "{{ epel_repository_enabled }}"
     gpgcheck: yes
-    gpgkey: "https://internal.las.iastate.edu/ansible/epel-{{ ansible_distribution_major_version }}-key.txt"
     state: present
   when: epel_use_remote_repositories
 
