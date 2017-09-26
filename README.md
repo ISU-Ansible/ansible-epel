@@ -22,7 +22,7 @@ This role installs the EPEL repository for use in RHEL systems.
 
 ### Changed Files
 - /etc/yum.repos.d/epel.repo
-- /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+- /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_version }}
 
 ### Installed Programs
 No installed programs.
@@ -31,7 +31,7 @@ No installed programs.
 Example
 -------
 
-### playbooks/elrepo_nvidia.yml
+### playbooks/epel.yml
 
     ---
     - name: EPEL Ansible Playbook
