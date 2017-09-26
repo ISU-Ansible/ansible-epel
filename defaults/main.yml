@@ -1,2 +1,6 @@
 ---
-# defaults file for .
+#
+# EPEL Settings
+#
+epel_use_remote_repositories: true
+epel_repository_emabled: "no"

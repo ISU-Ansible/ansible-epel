@@ -1,14 +1,5 @@
 ---
 #=====
-# Checking Network
-#=====
-- name: EPEL | Register network
-  tags: [ configuration, repos ]
-  shell: echo "{{ ansible_default_ipv4.network }}" | sed -e 's/\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*/\1.\2/'
-  register: epel_network_stub
-  changed_when: false
-
-#=====
 # EPEL External Repository installation/removal
 #=====
 - name: EPEL | Install epel yum repository
@@ -17,7 +8,6 @@
     name: epel
     description: EPEL repo
     mirrorlist: "https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch"
-    proxy: "{{ (epel_network_stub is defined and epel_network_stub.stdout == '10.10') | ternary(isu_global_proxy_server | default(omit), omit) or omit }}" 
     failovermethod: priority
     enabled: "{{ epel_repository_enabled }}"
     gpgcheck: yes
