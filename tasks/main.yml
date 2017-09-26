@@ -1,0 +1,51 @@
+---
+#=====
+# Checking Network
+#=====
+- name: EPEL | Register network
+  tags: [ configuration, repos ]
+  shell: echo "{{ ansible_default_ipv4.network }}" | sed -e 's/\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*/\1.\2/'
+  register: epel_network_stub
+  changed_when: false
+
+#=====
+# EPEL External Repository installation/removal
+#=====
+- name: EPEL | Install epel yum repository
+  tags: [ configuration, repos ]
+  yum_repository:
+    name: epel
+    description: EPEL repo
+    mirrorlist: "https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch"
+    proxy: "{{ (epel_network_stub is defined and epel_network_stub.stdout == '10.10') | ternary(isu_global_proxy_server | default(omit), omit) or omit }}" 
+    failovermethod: priority
+    enabled: "{{ epel_repository_enabled }}"
+    gpgcheck: yes
+    gpgkey: "https://internal.las.iastate.edu/ansible/epel-{{ ansible_distribution_major_version }}-key.txt"
+    state: present
+  when: epel_use_remote_repositories
+
+- name: EPEL | Remove epel.repo file
+  tags: [ configuration, repos ]
+  file:
+    path: "/etc/yum.repos.d/epel.repo"
+    state: absent
+  when: not epel_use_remote_repositories
+
+#=====
+# EPEL Key installation
+#=====
+- name: EPEL | Copy EPEL keys to PKI
+  copy:
+    src: "RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+    dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+    owner: root
+    group: root
+    mode: 0600
+    backup: yes
+ 
+- name: EPEL | Import EPEL key to RPM db
+  tags: [ configuration, repos ]
+  rpm_key: 
+    key: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+    state: present
