@@ -1,5 +1,20 @@
 ---
 - hosts: localhost
   remote_user: root
+  
   roles:
     - role_under_test
+
+  tasks:
+    - name: TEST | Check EPEL repo file
+      shell: cat /etc/yum.repos.d/epel.repo
+      register: epel_repo
+
+    - stat:
+        path: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+      register: epel_gpg
+
+    - assert:
+        that:
+          - '"mirrors.fedoraproject.org" in epel_repo.stdout'
+          - 'epel_gpg.stat.exists'
