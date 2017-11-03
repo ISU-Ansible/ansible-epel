@@ -2,41 +2,15 @@
 #=====
 # EPEL External Repository installation/removal
 #=====
-- name: EPEL | Install epel yum repository
-  tags: [ configuration, repos ]
-  yum_repository:
-    name: epel
-    description: EPEL repo
-    mirrorlist: "https://mirrors.fedoraproject.org/metalink?repo=epel-{{ ansible_distribution_major_version }}&arch=$basearch"
-    failovermethod: priority
-    enabled: "{{ epel_repository_enabled }}"
-    gpgcheck: yes
-    state: present
-  when: 
-    - epel_use_remote_repositories
+- include: repo/use.yml
+  when: epel_use_remote_repositories
 
-- name: EPEL | Remove epel.repo file
-  tags: [ configuration, repos ]
-  file:
-    path: "/etc/yum.repos.d/epel.repo"
-    state: absent
-  when: 
-    - not epel_use_remote_repositories
+- include: repo/not_use.yml
+  when: not epel_use_remote_repositories
+
 
 #=====
 # EPEL Key installation
 #=====
-- name: EPEL | Copy EPEL keys to PKI
-  copy:
-    src: "RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
-    dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
-    owner: root
-    group: root
-    mode: 0600
-    backup: yes
- 
-- name: EPEL | Import EPEL key to RPM db
-  tags: [ configuration, repos ]
-  rpm_key: 
-    key: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
-    state: present
+- include: keys/install.yml
+  when: epel_install_gpg_key

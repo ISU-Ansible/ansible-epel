@@ -1,0 +1,6 @@
+---
+- name: EPEL | Remove epel.repo file
+  tags: [ configuration, repos ]
+  file:
+    path: "/etc/yum.repos.d/epel.repo"
+    state: absent

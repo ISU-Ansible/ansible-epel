@@ -17,4 +17,5 @@
   - assert:
       that:
         - '"mirrors.fedoraproject.org" in epel_repo.stdout'
+        - '"enabled=yes" in epel_repo.stdout'
         - 'epel_gpg.stat.exists'

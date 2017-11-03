@@ -3,5 +3,5 @@
 # EPEL Settings
 #
 epel_use_remote_repositories: true
-epel_repository_enabled: "no"
-epel_install_repository: "yes"
+epel_install_gpg_key: true
+epel_repository_enabled: "yes"
