@@ -7,13 +7,9 @@
     group: root
     mode: 0600
     backup: yes
-  when:
-    - epel_install_gpg_key
  
 - name: EPEL | Import EPEL key to RPM db
   tags: [ configuration, repos ]
   rpm_key: 
     key: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
     state: present
-  when:
-    - epel_install_gpg_key
