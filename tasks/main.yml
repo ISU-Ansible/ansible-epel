@@ -2,15 +2,15 @@
 #=====
 # EPEL External Repository installation/removal
 #=====
-- include: repo/use.yml
+- include_tasks: repo/use.yml
   when: epel_use_remote_repositories
 
-- include: repo/not_use.yml
+- include_tasks: repo/not_use.yml
   when: not epel_use_remote_repositories
 
 
 #=====
 # EPEL Key installation
 #=====
-- include: keys/install.yml
+- include_tasks: keys/install.yml
   when: epel_install_gpg_key
