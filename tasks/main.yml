@@ -1,6 +1,7 @@
 ---
 - name: EPEL | Configure EPEL Repos
   block:
+
     #=====
     # EPEL External Repository installation/removal
     #=====
@@ -9,7 +10,6 @@
 
     - include: repo/not_use.yml
       when: not epel_use_remote_repositories
-
 
     #=====
     # EPEL Key installation
