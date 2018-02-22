@@ -16,6 +16,4 @@
     #=====
     - include: keys/install.yml
       when: epel_install_gpg_key
-  when: 
-    - ansible_distribution == "RedHat" 
-    - ansible_distribution == "CentOS"
+  when: (ansible_distribution == "RedHat") or (ansible_distribution == "CentOS")
